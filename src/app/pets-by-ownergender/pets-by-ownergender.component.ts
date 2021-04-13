@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Gender } from '../shared/models/gender';
+import { PeopleService } from '../shared/services/people.service';
+import * as _ from "lodash"
+import { Result } from '../shared/models/result';
 
 @Component({
   selector: 'app-pets-by-ownergender',
@@ -7,9 +11,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PetsByOwnergenderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: PeopleService) { }
+
+  owners: Result[] = [];
 
   ngOnInit(): void {
+    this.getPets();
   }
 
+
+  getPets() {
+    return this.service.getPeople()
+      .subscribe(response => {
+        this.owners = _(response)
+          .groupBy(x => x.gender)
+          .map((g, gender) => ({
+            gender: gender === Gender.Male ? Gender.Male : Gender.Female, pets: _(g)
+              .flatMap(x => x.pets)
+              .filter(x => x?.type.toUpperCase() === "CAT")
+              .value()
+          }))
+          .value();
+      });
+  }
 }

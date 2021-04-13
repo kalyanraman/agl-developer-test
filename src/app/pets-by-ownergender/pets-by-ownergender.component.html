@@ -1,1 +1,6 @@
-<p>pets-by-ownergender works!</p>>
+<div *ngFor="let owner of owners">
+    <h5>{{owner.gender}}</h5>
+    <ul>
+        <app-pets-list [pets]="owner.pets"></app-pets-list>
+    </ul>
+</div>
