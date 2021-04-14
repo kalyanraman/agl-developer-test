@@ -12,6 +12,8 @@ export class PeopleService {
   constructor(private httpClient: HttpClient) { }
 
   getPeople(): Observable<Owner[]> {
-    return this.httpClient.get<Owner[]>(environment.peopleUrl);
+    const baseUrl: string = environment.baseUrl;
+    const url: string = `${baseUrl}people.json`
+    return this.httpClient.get<Owner[]>(url);
   }
 }

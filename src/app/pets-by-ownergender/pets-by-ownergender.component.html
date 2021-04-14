@@ -1,6 +1,11 @@
-<div *ngFor="let owner of owners">
-    <h5>{{owner.gender}}</h5>
-    <ul>
-        <app-pets-list [pets]="owner.pets"></app-pets-list>
-    </ul>
+<div *ngIf="owners.length > 0; else elseBlock">
+    <div *ngFor="let owner of owners">
+        <h5>{{owner.gender}}</h5>
+        <ul>
+            <app-pets-list [pets]="owner.pets"></app-pets-list>
+        </ul>
+    </div>
 </div>
+<ng-template #elseBlock>
+    <h5>{{message}}</h5>
+</ng-template>

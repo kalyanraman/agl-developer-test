@@ -14,6 +14,7 @@ export class PetsByOwnergenderComponent implements OnInit {
   constructor(private service: PeopleService) { }
 
   owners: Result[] = [];
+  message: string = 'Loading...';
 
   ngOnInit(): void {
     this.getPets();
@@ -22,6 +23,7 @@ export class PetsByOwnergenderComponent implements OnInit {
 
   getPets() {
     return this.service.getPeople()
+
       .subscribe(response => {
         this.owners = _(response)
           .groupBy(x => x.gender)
@@ -31,7 +33,12 @@ export class PetsByOwnergenderComponent implements OnInit {
               .filter(x => x?.type.toUpperCase() === "CAT")
               .value()
           }))
+          .filter(x => x.pets?.length > 0)
           .value();
-      });
+
+        if (this.owners.length === 0) {
+          this.message = "No Owners";
+        }
+      }, err => this.message = 'Error while fetching the data...');
   }
 }
